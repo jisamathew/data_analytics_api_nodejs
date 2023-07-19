@@ -113,8 +113,10 @@ router.get('/getTransactions', async (req, res) => {
         const ecc = await ExportControlModel.find();
         console.log(ecc)
         for(var j=0;j<ecc.length;j++){
-            countries.push(ecc[i].cname);
+            countries.push(ecc[j].cname);
         }
+        console.log('countries')
+        console.log(countries)
         // ecc.forEach()
         const data = await KYCModel.find();
         console.log(data)
