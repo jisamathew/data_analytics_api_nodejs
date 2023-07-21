@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon index.js",
     "rimraf": "./node_modules/rimraf/bin.js",
-    "build":"npm install && rimraf ./build && tsc"
+    "build":"npm install"
   },
   "author": "",
   "license": "ISC",
