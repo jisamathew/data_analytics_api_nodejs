@@ -14,10 +14,9 @@ res.json('Hello Data Analytics API')
 })
 //Post Method
 router.post('/post', async (req, res) => {
-    const data = new KYCModel({
-        name: 'jisa',
-        email: 'emailid'
-    })
+    const data = new ExportControlModel({
+        cname: 'IRAN',
+        })
     try {
         const dataToSave = await data.save();
         res.status(200).json(dataToSave);
@@ -26,6 +25,20 @@ router.post('/post', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
+// router.post('/post', async (req, res) => {
+//     const data = new Model({
+//         name: req.body.name,
+//         age: req.body.age
+//     })
+
+//     try {
+//         const dataToSave = await data.save();
+//         res.status(200).json(dataToSave)
+//     }
+//     catch (error) {
+//         res.status(400).json({message: error.message})
+//     }
+// })
 async function httpGet(LEINo) {
     return new Promise((resolve, reject) => {
         // const url  =  "https://api.gleif.org/api/v1/lei-records?page[size]=10&page[number]=1&filter[lei]="+LEINo;  
