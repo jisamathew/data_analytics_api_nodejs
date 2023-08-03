@@ -15,7 +15,7 @@ res.json('Hello Data Analytics API')
 //Post Method
 router.post('/post', async (req, res) => {
     const data = new ExportControlModel({
-        cname: 'IRAN',
+        cname: req.body.cname,
         })
     try {
         const dataToSave = await data.save();
