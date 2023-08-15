@@ -121,7 +121,7 @@ router.get('/kyc', async (req, res) => {
         try {
             const logdataToSave = await logdata.save();
             
-            // res.status(200).json(logdataToSave);
+            res.status(200).json(logdataToSave);
         }
         catch (error) {
             res.status(400).json({ message: error.message })
