@@ -25,6 +25,19 @@ router.post('/post', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
+  router.post('/postInfo', async (req, res) => {
+    console.log(req.body)
+    // console.log(req.params.cname)
+    console.log(req.body)
+    const data = new KYCModel(req.body)
+    try {
+        const dataToSave = await data.save();
+        res.status(200).json(dataToSave);
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+})
 // router.post('/post', async (req, res) => {
 //     const data = new Model({
 //         name: req.body.name,
