@@ -2,6 +2,7 @@ const express = require('express');
 const KYCModel = require('../models/kyc');
 const TransactionModel = require('../models/transaction');
 const ExportControlModel = require('../models/exportcontrolcountry');
+const LogModel = require('../models/log')
 const router = express.Router();
 const https = require('https');
 const mongoose = require('mongoose');
@@ -14,6 +15,7 @@ res.json('Hello Data Analytics API')
 })
 //Post Method
 router.post('/post', async (req, res) => {
+    console.log(req)
     const data = new ExportControlModel({
         cname: req.body.cname,
         })
@@ -25,7 +27,7 @@ router.post('/post', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
-  router.post('/postInfo', async (req, res) => {
+    router.post('/postInfo', async (req, res) => {
     console.log(req.body)
     // console.log(req.params.cname)
     console.log(req.body)
@@ -38,20 +40,6 @@ router.post('/post', async (req, res) => {
         res.status(400).json({ message: error.message })
     }
 })
-// router.post('/post', async (req, res) => {
-//     const data = new Model({
-//         name: req.body.name,
-//         age: req.body.age
-//     })
-
-//     try {
-//         const dataToSave = await data.save();
-//         res.status(200).json(dataToSave)
-//     }
-//     catch (error) {
-//         res.status(400).json({message: error.message})
-//     }
-// })
 async function httpGet(LEINo) {
     return new Promise((resolve, reject) => {
         // const url  =  "https://api.gleif.org/api/v1/lei-records?page[size]=10&page[number]=1&filter[lei]="+LEINo;  
@@ -74,6 +62,8 @@ async function httpGet(LEINo) {
 router.get('/kyc', async (req, res) => {
     let leiArray = new Array();
     let finalLEIRecord = [];
+    let logArray = new Array();
+    let logRecord = [];
 
     try {
         const data = await KYCModel.find();
@@ -87,6 +77,7 @@ router.get('/kyc', async (req, res) => {
             const kycregDate = data[i].date;
             const currentDate = new Date();
             const mongo_id = data[i]._id
+            const lei_db_status= data[i].status
 
            if(LEINo === ''){
             //Missing LEI in KYC Collection
@@ -110,17 +101,31 @@ router.get('/kyc', async (req, res) => {
                     console.log(GLEIF_LEIStatus);
                     finalLEIRecord = {"status":GLEIF_LEIStatus,"lei":LEINo ,"name":name, "email": email,"wallet":wallet,"kycreg":kycregDate,"checkDate":currentDate,"mongoID":mongo_id,"legalAddress":GLEIF_Address,"city":cityName,"postalCode":GLEIFpostalCode,"GLEIFcountry":GLEIFcountry}
                     leiArray.push(finalLEIRecord)
+                    logRecord ={"lei":LEINo,"pastRecord":lei_db_status,"currentRecord":GLEIF_LEIStatus,"dateVerified":currentDate,"wallet":"Get Wallet address here"}
+                    logArray.push(logRecord)
                   }
                   else{
                     console.log('NO RECORDS FOUND');
                     finalLEIRecord = {"status":"NO RECORDS AVAILABLE","lei":LEINo ,"name":name, "email": email,"wallet":wallet,"kycreg":kycregDate,"checkDate":currentDate,"mongoID":mongo_id,"legalAddress":'Not Available',"city":'NA',"postalCode":'NA',"GLEIFcountry":'NA'}
                     leiArray.push(finalLEIRecord)
-                
+                    logRecord ={"lei":LEINo,"pastRecord":lei_db_status,"currentRecord":"No Records in GLEIF","dateVerified":currentDate,"wallet":"Get Wallet address here"}
+                    logArray.push(logRecord)                
                   }
            }
         }
         // console.log('leiArray')
         // console.log(leiArray)
+        //save logs to mongo
+        var LogJSON = JSON.stringify(logArray);
+        const logdata = new LogModel(LogJSON)
+        try {
+            const logdataToSave = await logdata.save();
+            
+            // res.status(200).json(logdataToSave);
+        }
+        catch (error) {
+            res.status(400).json({ message: error.message })
+        }
         res.json(leiArray);
 
      
