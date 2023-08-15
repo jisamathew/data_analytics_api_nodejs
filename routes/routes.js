@@ -58,6 +58,18 @@ async function httpGet(LEINo) {
           })
     });
 }
+async function saveLog(logArray){
+var LogJSON = JSON.stringify(logArray);
+        const logdata = new LogModel(LogJSON)
+        try {
+            const logdataToSave = await logdata.save();
+            
+            res.status(200).json(logdataToSave);
+        }
+        catch (error) {
+            res.status(400).json({ message: error.message })
+        }
+}
 //Get all from KYC Collection Method
 router.get('/kyc', async (req, res) => {
     let leiArray = new Array();
@@ -116,16 +128,7 @@ router.get('/kyc', async (req, res) => {
         // console.log('leiArray')
         // console.log(leiArray)
         //save logs to mongo
-        var LogJSON = JSON.stringify(logArray);
-        const logdata = new LogModel(LogJSON)
-        try {
-            const logdataToSave = await logdata.save();
-            
-            res.status(200).json(logdataToSave);
-        }
-        catch (error) {
-            res.status(400).json({ message: error.message })
-        }
+        saveLog(logArray)
         res.json(leiArray);
 
      
