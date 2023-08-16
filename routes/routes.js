@@ -61,15 +61,15 @@ async function httpGet(LEINo) {
 async function saveLog(logArray){
     console.log('logArray')
         console.log(logArray)
-// var LogJSON = JSON.stringify(logArray);
-    // console.log(LogJSON)
-        const logdata = new LogModel(logArray)
+var LogJSON = JSON.stringify(logArray);
+    console.log(LogJSON)
+        const logdata = new LogModel(logJSON)
         try {
             const logdataToSave = await logdata.save();
             console.log('Log saved')
 // res.status(200).json(logdataToSave)
             
-            alert('Log Data saved ')
+            console.log('Log Data saved ')
         }
         catch (error) {
             console.log(error.message)
