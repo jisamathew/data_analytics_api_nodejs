@@ -67,6 +67,8 @@ var LogJSON = JSON.stringify(logArray);
         try {
             const logdataToSave = await logdata.save();
             console.log('Log saved')
+res.status(200).json(logdataToSave)
+            
             alert('Log Data saved ')
         }
         catch (error) {
@@ -130,9 +132,10 @@ router.get('/kyc', async (req, res) => {
         }
         
         //save logs to mongo
-        await saveLog(logArray)
+        const logsaved = await saveLog(logArray)
+        if(logsaved.length != 0 ){ 
         res.json(leiArray);
-
+        }
      
     }
     catch (error) {
