@@ -63,8 +63,8 @@ var LogJSON = JSON.stringify(logArray);
         const logdata = new LogModel(LogJSON)
         try {
             const logdataToSave = await logdata.save();
-            
-            res.status(200).json(logdataToSave);
+            console.log('Log saved')
+            alert('Log Data saved ')
         }
         catch (error) {
             res.status(400).json({ message: error.message })
