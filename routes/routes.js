@@ -125,10 +125,10 @@ router.get('/kyc', async (req, res) => {
                   }
            }
         }
-        // console.log('leiArray')
-        // console.log(leiArray)
+        console.log('logArray')
+        console.log(logArray)
         //save logs to mongo
-        saveLog(logArray)
+        await saveLog(logArray)
         res.json(leiArray);
 
      
