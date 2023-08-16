@@ -72,7 +72,8 @@ async function saveLog(logArray){
             alert('Log Data saved ')
         }
         catch (error) {
-            res.status(400).json({ message: error.message })
+            console.log(error.message
+            // res.status(400).json({ message: error.message })
         }
 }
 //Get all from KYC Collection Method
