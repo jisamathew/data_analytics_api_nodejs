@@ -134,10 +134,8 @@ router.get('/kyc', async (req, res) => {
         
         //save logs to mongo
         const logsaved = await saveLog(logArray)
-        if(logsaved.length != 0 ){ 
         res.json(leiArray);
-        }
-     
+        
     }
     catch (error) {
         res.status(500).json({ message: error.message })
