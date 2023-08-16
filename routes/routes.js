@@ -67,7 +67,7 @@ var LogJSON = JSON.stringify(logArray);
         try {
             const logdataToSave = await logdata.save();
             console.log('Log saved')
-// res.status(200).json(logdataToSave)
+res.status(200).json(logdataToSave)
             
             alert('Log Data saved ')
         }
