@@ -6,8 +6,8 @@ const ObjectId = Schema.Types.ObjectId
 let LogSchema = new Schema({
    _id:{type:ObjectId},
    lei: { type: String },
-   pastRecordStatus: { type: String },
-   currentRecordStatus: { type: String },
+   pastRecord: { type: String },
+   currentRecord: { type: String },
    dateVerified: { type: String },
    wallet: {  type: String },
 })
