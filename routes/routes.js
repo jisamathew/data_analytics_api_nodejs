@@ -63,7 +63,7 @@ async function saveLog(logArray){
         console.log(logArray)
 var LogJSON = JSON.stringify(logArray);
     console.log(LogJSON)
-        const logdata = new LogModel(logJSON)
+        const logdata = new LogModel(LSogJSON)
         try {
             const logdataToSave = await logdata.save();
             console.log('Log saved')
