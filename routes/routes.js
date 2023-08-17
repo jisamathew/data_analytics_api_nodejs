@@ -63,17 +63,18 @@ async function saveLog(logArray){
 // //         console.log(logArray)
 // var LogJSON = JSON.stringify(logArray);
 //     console.log(LogJSON)
-        const logdata = new LogModel({logArray})
+    for (var i=0;i< logArray.length;i++)
+        {
+        const logdata = new LogModel({logArray[i]})
         try {
-            const logdataToSave = await logdata.save();
+            const logdataToSave = await logdata.save()
             console.log('Log saved')
 // res.status(200).json(logdataToSave)
-            
-            console.log('Log Data saved ')
         }
         catch (error) {
             console.log(error.message)
             // res.status(400).json({ message: error.message })
+        }
         }
 }
 //Get all from KYC Collection Method
