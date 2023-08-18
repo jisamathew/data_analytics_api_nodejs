@@ -211,6 +211,19 @@ router.get('/getTransactions', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+router.get('/getLogs/:lei', async (req, res) => {
+    try{
+    console.log(req.params.lei)
+        const LEI =req.params.lei;
+         const findResult = await LogModel.find({
+      lei: LEI,
+      });
+        res.json(findResult);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
 //Get by ID Method
 router.get('/getHistory/:lei', async (req, res) => {
     const orderDetails = [];
