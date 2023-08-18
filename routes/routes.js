@@ -143,6 +143,72 @@ router.get('/kyc', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+//Get all from KYC Collection Method
+router.get('/kyc/:walletAddress', async (req, res) => {
+    let leiArray = new Array();
+    let finalLEIRecord = [];
+    let logArray = new Array();
+    let logRecord = [];
+    let metamaskAddress = req.params.walletAddress;
+    try {
+        const data = await KYCModel.find();
+        console.log(data)
+        for(var i=0;i<data.length;i++){
+            console.log(data[i].lei)
+            const LEINo = data[i].lei;
+            const name =  data[i].name;
+            const email = data[i].email;
+            const wallet = data[i].wallet;
+            const kycregDate = data[i].date;
+            const currentDate = new Date();
+            const mongo_id = data[i]._id
+            const lei_db_status= data[i].status
+
+           if(LEINo === ''){
+            //Missing LEI in KYC Collection
+            console.log('MISSING LEI INFO in KYC Collection')
+           }
+           else{ //LEI Available in KYC Collection
+            //GLEIF LEI Verification - Check if lei records Available
+            const parsedata = await httpGet(LEINo);
+       
+                  console.log('Data Fetched from GLEIF API');
+                    // console.log(parsedata);
+                  if(parsedata.data.length != 0 ){ 
+                    //console.log(data);
+                    //Check with lei status
+                    const GLEIF_LEIStatus = parsedata.data[0].attributes.entity.status;
+                    // const GLEIF_Address = parsedata.data[0].attributes.entity.legalAddress;
+                    const GLEIF_Address = parsedata.data[0].attributes.entity.legalAddress.addressLines[0];
+                    const cityName = parsedata.data[0].attributes.entity.legalAddress.city;
+                    const GLEIFpostalCode = parsedata.data[0].attributes.entity.legalAddress.postalCode;
+                    const GLEIFcountry = parsedata.data[0].attributes.entity.legalAddress.country;
+                    console.log(GLEIF_LEIStatus);
+                    finalLEIRecord = {"status":GLEIF_LEIStatus,"lei":LEINo ,"name":name, "email": email,"wallet":wallet,"kycreg":kycregDate,"checkDate":currentDate,"mongoID":mongo_id,"legalAddress":GLEIF_Address,"city":cityName,"postalCode":GLEIFpostalCode,"GLEIFcountry":GLEIFcountry}
+                    leiArray.push(finalLEIRecord)
+                    logRecord ={"lei":LEINo,"pastRecord":lei_db_status,"currentRecord":GLEIF_LEIStatus,"dateVerified":currentDate,"wallet":metamaskAddress}
+                    logArray.push(logRecord)
+                  }
+                  else{
+                    console.log('NO RECORDS FOUND');
+                    finalLEIRecord = {"status":"NO RECORDS AVAILABLE","lei":LEINo ,"name":name, "email": email,"wallet":wallet,"kycreg":kycregDate,"checkDate":currentDate,"mongoID":mongo_id,"legalAddress":'Not Available',"city":'NA',"postalCode":'NA',"GLEIFcountry":'NA'}
+                    leiArray.push(finalLEIRecord)
+                    logRecord ={"lei":LEINo,"pastRecord":lei_db_status,"currentRecord":"No Records in GLEIF","dateVerified":currentDate,"wallet":metamaskAddress}
+                    logArray.push(logRecord)                
+                  }
+           }
+        }
+        
+        //save logs to mongo
+        const logsaved = await saveLog(logArray)
+        res.json(leiArray);
+        
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 router.get('/getTransactions', async (req, res) => {
     let transArray = new Array();
     let finalTransactionRecord = [];
