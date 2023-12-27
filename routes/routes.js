@@ -308,7 +308,10 @@ router.get('/getHistory/:lei', async (req, res) => {
                     const orderProduct = orderInfo.orderDetails;
                     const orderId = orderInfo.orderId;
                     const date = orderInfo.date;
-                    orderDetails.push({"consignee":consignee,"quantity":quantity,"orderDetails":orderProduct, "orderId":orderId,"orderdate":date})
+                    const origin = orderInfo.origin
+                    const destination = orderInfo.destination;
+                    const eccstatus = orderInfo.eccstatus;
+                    orderDetails.push({"consignee":consignee,"quantity":quantity,"orderDetails":orderProduct, "orderId":orderId,"orderdate":date,"origin":origin,"destination":destination,"eccstatus":eccstatus})
                   });
                   res.json(orderDetails)
     
