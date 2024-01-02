@@ -311,7 +311,8 @@ router.get('/getHistory/:lei', async (req, res) => {
                     const origin = orderInfo.origin
                     const destination = orderInfo.destination;
                     const eccstatus = orderInfo.eccstatus;
-                    orderDetails.push({"consignee":consignee,"quantity":quantity,"orderDetails":orderProduct, "orderId":orderId,"orderdate":date,"origin":origin,"destination":destination,"eccstatus":eccstatus})
+                    const orderstatus = orderInfo.orderstatus;
+                    orderDetails.push({"consignee":consignee,"quantity":quantity,"orderDetails":orderProduct, "orderId":orderId,"orderdate":date,"origin":origin,"destination":destination,"eccstatus":eccstatus,"orderstatus":orderstatus})
                   });
                   res.json(orderDetails)
     
