@@ -3,6 +3,7 @@ const KYCModel = require('../models/kyc');
 const TransactionModel = require('../models/transaction');
 const ExportControlModel = require('../models/exportcontrolcountry');
 const LogModel = require('../models/log')
+const OrderModel = require('../models/order')
 const router = express.Router();
 const https = require('https');
 const mongoose = require('mongoose');
@@ -325,7 +326,7 @@ router.get('/getHistory/:lei', async (req, res) => {
 })router.get('/getOrderData/:order', async (req, res) => {
     try {
         const ORDERNO = req.params.order;
-        const orderInfo = await OrderModel.find({ "order.orderId": ORDERNO });
+        const orderInfo = await OrderModel.find({ "order.OrderNo": ORDERNO });
         console.log('orderInfo')
         console.log(orderInfo)
         if (orderInfo.length > 0) {
