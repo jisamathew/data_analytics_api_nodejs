@@ -323,7 +323,8 @@ router.get('/getHistory/:lei', async (req, res) => {
     catch (error) {
         res.status(500).json({ message: error.message })
     }
-})router.get('/getOrderData/:order', async (req, res) => {
+})
+router.get('/getOrderData/:order', async (req, res) => {
     try {
         const ORDERNO = req.params.order;
         const orderInfo = await OrderModel.find({ "order.OrderNo": ORDERNO });
@@ -361,7 +362,7 @@ router.get('/getHistory/:lei', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-});
+})
 
 
 //Update by ID Method
