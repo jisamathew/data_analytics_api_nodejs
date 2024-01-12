@@ -347,7 +347,7 @@ router.get('/getOrderData/:order', async (req, res) => {
 
             const orderDetails = {
                 "consignee": consignee,
-                "seller":seller
+                "seller":seller,
                // "quantity": quantity,
                 // "orderDetails": orderProduct,
                 "orderId": orderId,
