@@ -322,7 +322,46 @@ router.get('/getHistory/:lei', async (req, res) => {
     catch (error) {
         res.status(500).json({ message: error.message })
     }
-})
+})router.get('/getOrderData/:order', async (req, res) => {
+    try {
+        const ORDERNO = req.params.order;
+        const orderInfo = await OrderModel.find({ "order.orderId": ORDERNO });
+        console.log('orderInfo')
+        console.log(orderInfo)
+        if (orderInfo.length > 0) {
+            //const orderInfo = data[0].order.find(order => order.OrderNo === ORDERNO);
+
+            const consignee = orderInfo.consignee;
+            const quantity = orderInfo.quantity;
+            const orderProduct = orderInfo.orderDetails;
+            const orderId = orderInfo.orderId;
+            const date = orderInfo.date;
+            const origin = orderInfo.origin;
+            const destination = orderInfo.destination;
+            const eccstatus = orderInfo.eccstatus;
+            const orderstatus = orderInfo.orderstatus;
+
+            const orderDetails = {
+                "consignee": consignee,
+                "quantity": quantity,
+                "orderDetails": orderProduct,
+                "orderId": orderId,
+                "orderdate": date,
+                "origin": origin,
+                "destination": destination,
+                "eccstatus": eccstatus,
+                "orderstatus": orderstatus
+            };
+
+            return res.json(orderDetails);
+        } else {
+            res.status(404).json({ message: "Order not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 //Update by ID Method
 router.patch('/update/:id', async (req, res) => {
