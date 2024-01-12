@@ -327,25 +327,28 @@ router.get('/getHistory/:lei', async (req, res) => {
 router.get('/getOrderData/:order', async (req, res) => {
     try {
         const ORDERNO = req.params.order;
-        const orderInfo = await OrderModel.find({ "order.OrderNo": ORDERNO });
+        const data = await OrderModel.find({ "order.OrderNo": ORDERNO });
         console.log('orderInfo')
-        console.log(orderInfo)
-        if (orderInfo.length > 0) {
-            //const orderInfo = data[0].order.find(order => order.OrderNo === ORDERNO);
-
-            const consignee = orderInfo.consignee;
-            const quantity = orderInfo.quantity;
-            const orderProduct = orderInfo.orderDetails;
-            const orderId = orderInfo.orderId;
-            const date = orderInfo.date;
-            const origin = orderInfo.origin;
-            const destination = orderInfo.destination;
-            const eccstatus = orderInfo.eccstatus;
-            const orderstatus = orderInfo.orderstatus;
+        console.log(data)
+        if (data.length > 0) {
+            const orderInfo = data[0].find(order => order.OrderNo === ORDERNO);
+            console.log('Getting orderimfo')
+            console.log(orderInfo)
+            const consignee = orderInfo.consigneeName;
+            const seller = orderInfo.seller;
+          //  const quantity = orderInfo.quantity;
+            //const orderProduct = orderInfo.orderDetails;
+            const orderId = orderInfo.orderNo;
+            const date = orderInfo.orderDate;
+            const origin = orderInfo.prodLoc;
+            const destination = orderInfo.prodDelLoc;
+            const eccstatus = orderInfo.eccStatus;
+            const orderstatus = orderInfo.current_status;
 
             const orderDetails = {
                 "consignee": consignee,
-                "quantity": quantity,
+                "seller":seller
+               // "quantity": quantity,
                 "orderDetails": orderProduct,
                 "orderId": orderId,
                 "orderdate": date,
