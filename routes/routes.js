@@ -1,6 +1,7 @@
 const express = require('express');
 const KYCModel = require('../models/kyc');
 const TransactionModel = require('../models/transaction');
+const HistoricalTransactionModel = require('../models/historicaltransaction');
 const ExportControlModel = require('../models/exportcontrolcountry');
 const LogModel = require('../models/log')
 const OrderModel = require('../models/order')
