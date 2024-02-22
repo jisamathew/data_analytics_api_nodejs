@@ -366,7 +366,32 @@ router.get('/getOrderData/:order', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 })
-
+//Code Added for SWIFT challenge - transaction fraud detection
+router.get('/getHistoricalTransactionFraudDetection/:lei', async (req, res) => {
+      // Search for transactions matching the LEI
+        // const searchedLEI = '5493006X0ZOV4Q5DPB65'; // Your searched LEI
+        console.log(req.params.lei)
+        const searchedLEI =req.params.lei;// Your searched LEI
+      
+        
+        Transaction.find({
+            $or: [
+                { leiOrig: searchedLEI },
+                { leiDest: searchedLEI }
+            ]
+        })
+        .then(transactions => {
+            console.log('Transactions found:', transactions);
+            // Do something with the found transactions
+             res.json(transactions)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+             res.status(500).json({ message: error.message })
+    
+        });
+   
+})
 
 //Update by ID Method
 router.patch('/update/:id', async (req, res) => {
