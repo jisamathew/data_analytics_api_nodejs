@@ -375,7 +375,7 @@ router.get('/getHistoricalTransactionFraudDetection/:lei', async (req, res) => {
         const searchedLEI =req.params.lei;// Your searched LEI
       
         
-        Transaction.find({
+        HistoricalTransactionModel.find({
             $or: [
                 { leiOrig: searchedLEI },
                 { leiDest: searchedLEI }
