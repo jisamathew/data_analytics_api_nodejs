@@ -378,7 +378,8 @@ router.get('/getHistoricalTransactionFraudDetection/:lei', async (req, res) => {
         HistoricalTransactionModel.find({
             $or: [
                 { leiOrig: searchedLEI },
-                { leiDest: searchedLEI }
+                { leiDest: searchedLEI },
+                { leiShipper: searchedLEI }
             ]
         })
         .then(transactions => {
