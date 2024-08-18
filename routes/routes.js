@@ -369,31 +369,36 @@ router.get('/getOrderData/:order', async (req, res) => {
 })
 //Code Added for SWIFT challenge - transaction fraud detection
 router.get('/getHistoricalTransactionFraudDetection/:lei', async (req, res) => {
-      // Search for transactions matching the LEI
-        // const searchedLEI = '5493006X0ZOV4Q5DPB65'; // Your searched LEI
-        console.log(req.params.lei)
-        const searchedLEI =req.params.lei;// Your searched LEI
-      
-        
-        HistoricalTransactionModel.find({
-            $or: [
-                { leiOrig: searchedLEI },
-                { leiDest: searchedLEI },
-                { leiShipper: searchedLEI }
-            ]
-        })
-        .then(transactions => {
-            console.log('Transactions found:', transactions);
-            // Do something with the found transactions
-             res.json(transactions)
-        })
-        .catch(error => {
-            console.error('Error:', error);
-             res.status(500).json({ message: error.message })
-    
-        });
-   
-})
+    // Capture the searched LEI from the request parameters
+    const searchedLEI = req.params.lei;
+    console.log('Searched LEI:', searchedLEI);
+
+    // Find transactions where the searched LEI matches exactly in one of the specified fields
+    HistoricalTransactionModel.find({
+        $or: [
+            { leiOrig: searchedLEI },
+            { leiDest: searchedLEI },
+            { leiShipper: searchedLEI }
+        ]
+    })
+    .then(transactions => {
+        console.log('Transactions found:', transactions);
+
+        // Filter the transactions to include only those where the searched LEI is an exact match
+        const filteredTransactions = transactions.filter(transaction => 
+            transaction.leiOrig === searchedLEI || 
+            transaction.leiDest === searchedLEI || 
+            transaction.leiShipper === searchedLEI
+        );
+
+        // Return the filtered transactions
+        res.json(filteredTransactions);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        res.status(500).json({ message: error.message });
+    });
+});
 
 //Update by ID Method
 router.patch('/update/:id', async (req, res) => {
