@@ -21,7 +21,8 @@ let HistoricalTransactionSchema = new Schema({
     consigneeLocation:{type: String},
     isFraud:{type: String} ,
     isFlaggedFraud: {type: String},
-    AnomalyIndicators:{type: String}
+    AnomalyIndicators:{type: String},
+    leiShipper:{type: String},
   
 })
 module.exports = mongoose.model('HistoricalTransaction', HistoricalTransactionSchema)
