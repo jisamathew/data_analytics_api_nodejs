@@ -373,16 +373,22 @@ router.get('/getHistoricalTransactionFraudDetection/:lei', async (req, res) => {
     const searchedLEI = req.params.lei;
     console.log('Searched LEI:', searchedLEI);
 
-    // Find transactions where the searched LEI matches exactly in one of the specified fields
-    HistoricalTransactionModel.find({
-        $or: [
-            { leiOrig: searchedLEI },
-            { leiDest: searchedLEI },
-            { leiShipper: searchedLEI }
-        ]
-    })
-    .then(transactions => {
+    try {
+        // Find transactions where the searched LEI matches exactly in one of the specified fields
+        const transactions = await HistoricalTransactionModel.find({
+            $or: [
+                { leiOrig: searchedLEI },
+                { leiDest: searchedLEI },
+                { leiShipper: searchedLEI }
+            ]
+        });
+
         console.log('Transactions found:', transactions);
+
+        // Debugging: Log the fields and their values
+        transactions.forEach(transaction => {
+            console.log(`Transaction ID: ${transaction._id}, leiOrig: ${transaction.leiOrig}, leiDest: ${transaction.leiDest}, leiShipper: ${transaction.leiShipper}`);
+        });
 
         // Filter the transactions to include only those where the searched LEI is an exact match
         const filteredTransactions = transactions.filter(transaction => 
@@ -391,14 +397,16 @@ router.get('/getHistoricalTransactionFraudDetection/:lei', async (req, res) => {
             transaction.leiShipper === searchedLEI
         );
 
+        console.log('Filtered Transactions:', filteredTransactions);
+
         // Return the filtered transactions
         res.json(filteredTransactions);
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ message: error.message });
-    });
+    }
 });
+
 
 //Update by ID Method
 router.patch('/update/:id', async (req, res) => {
